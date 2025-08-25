@@ -37,6 +37,14 @@ export const BookingsScreen = () => {
     return imagesMap[key] || imagesMap.UpcomingImg;
   };
 
+  const filteredBookings = bookings.filter((item) => {
+    if (selectedFilter === "All") return true;
+
+    const normalizedStatus =
+      item.status === "In Draft" ? "Draft" : item.status;
+
+    return normalizedStatus === selectedFilter;
+  });
 
   return (
     <View style={styles.container}>
@@ -71,10 +79,17 @@ export const BookingsScreen = () => {
 
       {/* Bookings List */}
       <FlatList
-        data={bookings}
+        data={filteredBookings}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Card booking={{ ...item, image: getImageSource(item.image) }} />}
+        renderItem={({ item }) => (
+          <Card booking={{ ...item, image: getImageSource(item.image) }} />
+        )}
         contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <Text style={{ color: Colors.textTertiary, textAlign: "center", marginTop: 40 }}>
+            No bookings found
+          </Text>
+        }
       />
 
       {/* Modal */}

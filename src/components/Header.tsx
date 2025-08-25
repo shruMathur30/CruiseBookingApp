@@ -8,6 +8,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-      <Text style={{ color: Colors.textPrimary, fontSize: 20, fontWeight: '700', paddingVertical: 20 }}>{title}</Text>
+      <Text style={{ color: Colors.textPrimary, fontSize: 20, fontWeight: '700', paddingVertical: 30, marginLeft: 20 }}>{title}</Text>
   );
 };
