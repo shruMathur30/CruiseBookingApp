@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontSize: 14,
     fontWeight: "500",
+    textAlign: 'center'
   },
   imgRow: {
     flexDirection: "row",

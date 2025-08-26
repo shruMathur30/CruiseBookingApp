@@ -55,8 +55,8 @@ export const AppNavigator = () => (
             <Image
               source={icon}
               style={{
-                width: 24,
-                height: 24,
+                width: 44,
+                height: 44,
                 tintColor: focused ? Colors.textPrimary : Colors.icons,
               }}
               resizeMode="contain"
