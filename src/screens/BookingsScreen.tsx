@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 16,
-    marginTop: 20,
+    marginTop: 10,
   },
   modal: {
     justifyContent: "flex-end",

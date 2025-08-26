@@ -89,17 +89,10 @@ export const Card: React.FC<CardProps> = ({ booking }) => {
 
   return (
     <View style={styles.card}>
-      {/* Side Cuts */}
-      <View style={[styles.sideCut, styles.leftCut]} />
-      <View style={[styles.sideCut, styles.rightCut]} />
-
-      {booking.status !== 'In Draft' ? <Text style={styles.bookingId}>Booking ID: #{booking.id}</Text> : <Text style={styles.bookingId}></Text>}
-
-      {/* Image + Info */}
-      <View style={styles.row}>
+      {booking.status !== 'In Draft' ? <Text style={styles.bookingId}>Booking ID: #{booking.id}</Text> : <Text style={{marginTop: 0}}></Text>}
+      <View style={styles.topSection}>
         <Image source={booking.image} style={styles.image} />
-
-        <View style={styles.info}>
+        <View style={styles.details}>
           <Text style={styles.title}>{booking.title}</Text>
           <View style={styles.imgRow}>
             <Image
@@ -120,19 +113,25 @@ export const Card: React.FC<CardProps> = ({ booking }) => {
         </View>
       </View>
 
-      {/* Dashed Line */}
-      <View style={styles.divider} />
+      <View style={styles.bottomSection}>
+        {/* Left cut */}
+        <View style={[styles.sideCut, styles.leftCut]} />
 
-      {/* Status */}
-      <View style={styles.statusRow}>
-        <Text style={styles.statusLabel}>Status:</Text>
-        <Text style={[styles.statusValue, { color: getStatusColor() }]}>
-          {booking.status}
-        </Text>
+        {/* Right cut */}
+        <View style={[styles.sideCut, styles.rightCut]} />
+
+        {/* Dashed Line */}
+        <View style={styles.divider} />
+
+        {/* Status */}
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Status:  </Text>
+          <Text style={[styles.statusValue, { color: getStatusColor() }]}>
+            {booking.status}
+          </Text>
+        </View>
+        <View style={styles.buttonRow}>{renderButtons()}</View>
       </View>
-
-      {/* Buttons */}
-      <View style={styles.buttonRow}>{renderButtons()}</View>
     </View>
   );
 };
@@ -150,50 +149,23 @@ const styles = StyleSheet.create({
     color: Colors.neonGreen,
     fontSize: 12,
     fontWeight: "600",
-    margin: 12,
+    marginTop: 20,
     marginLeft: 16,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
-    marginRight: 14,
-  },
-  info: {
-    flex: 1,
-  },
-  title: {
-    color: Colors.grayShade,
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 6,
   },
   infoText: {
     color: Colors.white,
     fontSize: 14,
     marginBottom: 2,
   },
-  divider: {
-    borderTopWidth: 1,
-    borderStyle: "dashed",
-    borderColor: Colors.cardStroke,
-    marginHorizontal: 16,
-    marginVertical: 12,
-  },
   statusRow: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 16,
+    marginTop: 20
   },
   statusLabel: {
     color: Colors.textTertiary,
     fontSize: 14,
-    marginRight: 6,
   },
   statusValue: {
     fontSize: 14,
@@ -225,24 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
-  sideCut: {
-    position: "absolute",
-    width: 28,
-    height: 28,
-    backgroundColor: "#000",
-    zIndex: 5,
-    top: "45%",
-  },
-  leftCut: {
-    left: -14,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  rightCut: {
-    right: -14,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-  },
   imgRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -255,4 +209,56 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     tintColor: "#4B4B4B",
   },
+  bottomSection: {
+    marginTop: 10,
+    position: "relative",
+  },
+  sideCut: {
+    position: "absolute",
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: Colors.primary,
+    top: -14,
+    zIndex: 10,
+  },
+  leftCut: { left: -14 },
+  rightCut: { right: -14 },
+  divider: {
+    borderTopWidth: 1,
+    borderStyle: "dashed",
+    borderColor: Colors.cardStroke,
+    marginHorizontal: 0,
+  },
+  topSection: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    paddingHorizontal: 12,
+    paddingTop: 12,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 12,
+    marginRight: 14,
+  },
+  details: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+  date: {
+    fontSize: 12,
+    color: "#B0B0B0",
+    marginBottom: 2,
+  },
+  location: {
+    fontSize: 12,
+    color: "#B0B0B0",
+  }
 });
