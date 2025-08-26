@@ -36,6 +36,7 @@ export const AppNavigator = () => (
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 12,
+          color: '#848484'
         },
         tabBarIcon: ({ focused }) => {
           let icon;
@@ -50,6 +51,7 @@ export const AppNavigator = () => (
           }
 
           return (
+            <View style={{elevation: focused ? 20 : 0}}>
             <Image
               source={icon}
               style={{
@@ -59,6 +61,7 @@ export const AppNavigator = () => (
               }}
               resizeMode="contain"
             />
+            </View>
           );
         },
       })}
@@ -71,7 +74,7 @@ export const AppNavigator = () => (
         options={{
           tabBarLabel: "",
           tabBarIcon: () => (
-            <View>
+            <View style={{bottom: -15}}>
               <Image
                 source={require("../assets/AddIcon.png")}
                 style={{ width: 58, height: 58 }}

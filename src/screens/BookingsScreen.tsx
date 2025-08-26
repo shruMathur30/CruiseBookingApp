@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   clearFilterText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "green",
+    color: Colors.neonGreen,
   },
 
 });
