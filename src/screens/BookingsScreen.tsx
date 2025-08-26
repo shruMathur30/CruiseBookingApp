@@ -19,6 +19,7 @@ export const BookingsScreen = () => {
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [activeTab, setActiveTab] = useState<"Cruise" | "Event" | "Hosting">("Event");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleModal = () => setFilterModalVisible(!isFilterModalVisible);
   const bookings = useSelector((state: RootState) => state.bookings.list);
@@ -38,12 +39,21 @@ export const BookingsScreen = () => {
   };
 
   const filteredBookings = bookings.filter((item) => {
-    if (selectedFilter === "All") return true;
+    if (selectedFilter !== "All") {
+      const normalizedStatus = item.status === "In Draft" ? "Draft" : item.status;
+      if (normalizedStatus !== selectedFilter) return false;
+    }
 
-    const normalizedStatus =
-      item.status === "In Draft" ? "Draft" : item.status;
+    if (searchQuery.trim() !== "") {
+      const lowerQuery = searchQuery.toLowerCase();
+      const matchesSearch =
+        item.title?.toLowerCase().includes(lowerQuery) ||
+        item.location?.toLowerCase().includes(lowerQuery) ||
+        item.status?.toLowerCase().includes(lowerQuery);
+      if (!matchesSearch) return false;
+    }
 
-    return normalizedStatus === selectedFilter;
+    return true;
   });
 
   return (
@@ -67,7 +77,12 @@ export const BookingsScreen = () => {
                     ? "Event Bookings"
                     : "Hosting"}
               </Text>
-              {isActive && <View style={styles.activeUnderline} />}
+              <View
+                style={[
+                  styles.underline,
+                  { backgroundColor: isActive ? Colors.textPrimary : Colors.textTertiary },
+                ]}
+              />
             </TouchableOpacity>
           );
         })}
@@ -77,20 +92,27 @@ export const BookingsScreen = () => {
       {/* Search + Filter */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBox}>
-          <Image source={require("../assets/Search.png")} style={styles.searchIcon} />
+          <Image
+            source={require("../assets/Search.png")}
+            style={styles.searchIcon}
+          />
           <TextInput
             placeholder="Search"
             placeholderTextColor={Colors.textTertiary}
             style={styles.searchInput}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </View>
 
         <TouchableOpacity style={styles.filterButton} onPress={toggleModal}>
-          <Image source={require("../assets/Filter.png")} style={styles.filterIcon} />
+          <Image
+            source={require("../assets/Filter.png")}
+            style={styles.filterIcon}
+          />
         </TouchableOpacity>
       </View>
 
-      {/* Show Filters Applied if filter ≠ All */}
       {selectedFilter !== "All" && (
         <View style={styles.filtersAppliedRow}>
           <Text style={styles.filtersAppliedText}>Filters applied</Text>
@@ -99,7 +121,6 @@ export const BookingsScreen = () => {
           </TouchableOpacity>
         </View>
       )}
-
 
       {/* Bookings List */}
       <FlatList
@@ -110,7 +131,13 @@ export const BookingsScreen = () => {
         )}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
-          <Text style={{ color: Colors.textTertiary, textAlign: "center", marginTop: 40 }}>
+          <Text
+            style={{
+              color: Colors.textTertiary,
+              textAlign: "center",
+              marginTop: 40,
+            }}
+          >
             No bookings found
           </Text>
         }
@@ -131,26 +158,33 @@ export const BookingsScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ borderBottomWidth: 1, borderColor: '#242424' }} />
+          <View style={{ borderBottomWidth: 1, borderColor: "#242424" }} />
 
           <View style={styles.filterOptions}>
-            {["All", "Up Coming", "Completed", "Draft", "Canceled"].map((filter) => {
-              const isActive = selectedFilter === filter;
-              return (
-                <TouchableOpacity
-                  key={filter}
-                  style={[styles.filterTag, isActive && styles.filterTagActive]}
-                  onPress={() => {
-                    setSelectedFilter(filter);
-                    toggleModal();
-                  }}
-                >
-                  <Text style={[styles.filterTagText, isActive && styles.filterTagTextActive]}>
-                    {filter}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {["All", "Up Coming", "Completed", "Draft", "Canceled"].map(
+              (filter) => {
+                const isActive = selectedFilter === filter;
+                return (
+                  <TouchableOpacity
+                    key={filter}
+                    style={[styles.filterTag, isActive && styles.filterTagActive]}
+                    onPress={() => {
+                      setSelectedFilter(filter);
+                      toggleModal();
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.filterTagText,
+                        isActive && styles.filterTagTextActive,
+                      ]}
+                    >
+                      {filter}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
+            )}
           </View>
         </View>
       </Modal>
@@ -181,11 +215,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Colors.textPrimary,
   },
-  activeUnderline: {
-    marginTop: 6,
-    height: 2,
-    width: "60%",
-    backgroundColor: Colors.textPrimary,
+  underline: {
+    marginTop: 10,
+    height: 1,
+    width: "100%",
     borderRadius: 2,
   },
   searchContainer: {
