@@ -5,9 +5,10 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  ImageSourcePropType 
+  ImageSourcePropType
 } from "react-native";
 import { Colors } from "../theme/colors";
+import LinearGradient from "react-native-linear-gradient";
 
 interface Booking {
   id: string;
@@ -25,30 +26,38 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ booking }) => {
   const renderButtons = () => {
     const secondaryButton = (label: string) => (
-      <TouchableOpacity style={[styles.button, styles.secondaryButton]}>
+      <TouchableOpacity style={[styles.button, styles.secondaryButton, { backgroundColor: Colors.cardBg }]}>
         <Text style={styles.buttonText}>{label}</Text>
       </TouchableOpacity>
     );
 
-    const primaryButton = (label: string) => (
-      <TouchableOpacity style={[styles.button, styles.primaryButton]}>
-        <Text style={styles.buttonText}>{label}</Text>
-      </TouchableOpacity>
+    const primaryButton = (label: string, gradient?: boolean) => (
+      <LinearGradient
+        colors={gradient ? ["#C9C9C9", "#C9C9C9", "#838383"] : ["#202020", "#202020"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={[styles.button, styles.primaryButton]}
+      >
+        <TouchableOpacity style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Text style={[styles.buttonText, { color: gradient ? Colors.primary : Colors.white }]}>{label}</Text>
+        </TouchableOpacity>
+      </LinearGradient>
     );
+
 
     switch (booking.status) {
       case "Up Coming":
         return (
           <>
             {secondaryButton("View Tickets")}
-            {primaryButton("View Details")}
+            {primaryButton("View Details", false)}
           </>
         );
       case "In Draft":
         return (
           <>
             {secondaryButton("Delete")}
-            {primaryButton("Continue To Booking")}
+            {primaryButton("Continue To Booking", true)}
           </>
         );
       case "Completed":
@@ -72,7 +81,7 @@ export const Card: React.FC<CardProps> = ({ booking }) => {
       case "Completed":
         return Colors.success.green4;
       case "Canceled":
-        return Colors.error.red4;
+        return Colors.textTertiary;
       default:
         return Colors.textTertiary;
     }
@@ -92,8 +101,22 @@ export const Card: React.FC<CardProps> = ({ booking }) => {
 
         <View style={styles.info}>
           <Text style={styles.title}>{booking.title}</Text>
-          <Text style={styles.infoText}>📅 {booking.date}</Text>
-          <Text style={styles.infoText}>📍 {booking.location}</Text>
+          <View style={styles.imgRow}>
+            <Image
+              source={require("../assets/CalendarCheck.png")}
+              style={styles.icon}
+            />
+            <Text style={styles.infoText}>{booking.date}</Text>
+          </View>
+
+          <View style={styles.imgRow}>
+            <Image
+              source={require("../assets/LocationPin.png")}
+              style={styles.icon}
+            />
+            <Text style={styles.infoText}>{booking.location}</Text>
+          </View>
+
         </View>
       </View>
 
@@ -124,7 +147,7 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   bookingId: {
-    color: Colors.success.green5,
+    color: Colors.neonGreen,
     fontSize: 12,
     fontWeight: "600",
     margin: 12,
@@ -145,14 +168,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: Colors.textPrimary,
+    color: Colors.grayShade,
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "600",
     marginBottom: 6,
   },
   infoText: {
-    color: Colors.textTertiary,
-    fontSize: 13,
+    color: Colors.white,
+    fontSize: 14,
     marginBottom: 2,
   },
   divider: {
@@ -183,12 +206,13 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    padding: 10,
     borderRadius: 20,
     marginHorizontal: 6,
     alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 13,
     borderWidth: 1,
-    borderColor: Colors.buttonStroke,
+    borderColor: Colors.buttonBg,
   },
   primaryButton: {
     backgroundColor: Colors.buttonBg,
@@ -218,5 +242,17 @@ const styles = StyleSheet.create({
     right: -14,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
+  },
+  imgRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 4,
+  },
+  icon: {
+    width: 18,
+    height: 18,
+    marginRight: 8,
+    resizeMode: "contain",
+    tintColor: "#4B4B4B",
   },
 });

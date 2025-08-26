@@ -6,6 +6,8 @@ export const Colors = {
   textPrimary: "#FFFFFF",
   textSecondary: "#060606",
   textTertiary: "#848484",
+  neonGreen: "#7DA943",
+  grayShade: '#F6F6F6',
 
   // Secondary
   cardBg: "#171717",
