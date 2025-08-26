@@ -7,6 +7,7 @@ import { EventBookingsScreen } from "../screens/EventBookingsScreen";
 import { BookingsScreen } from "../screens/BookingsScreen";
 import { Colors } from "../theme/colors";
 import { Image, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function BookingsStack() {
 
 export const AppNavigator = () => (
   <NavigationContainer>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primary }}>
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
@@ -83,5 +85,6 @@ export const AppNavigator = () => (
       <Tab.Screen name="Events" component={EventBookingsScreen} />
       <Tab.Screen name="Support" component={EventBookingsScreen} />
     </Tab.Navigator>
+    </SafeAreaView>
   </NavigationContainer>
 );

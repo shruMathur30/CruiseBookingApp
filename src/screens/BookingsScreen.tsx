@@ -52,14 +52,27 @@ export const BookingsScreen = () => {
 
       {/* Top Tabs */}
       <View style={styles.tabsRow}>
-        {["Cruise", "Event", "Hosting"].map((tab) => (
-          <TouchableOpacity key={tab} onPress={() => setActiveTab(tab as any)}>
-            <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-              {tab === "Cruise" ? "Cruise Bookings" : tab === "Event" ? "Event Bookings" : "Hosting"}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {["Cruise", "Event", "Hosting"].map((tab) => {
+          const isActive = activeTab === tab;
+          return (
+            <TouchableOpacity
+              key={tab}
+              style={styles.tabButton}
+              onPress={() => setActiveTab(tab as any)}
+            >
+              <Text style={[styles.tabText, isActive && styles.tabTextActive]}>
+                {tab === "Cruise"
+                  ? "Cruise Bookings"
+                  : tab === "Event"
+                    ? "Event Bookings"
+                    : "Hosting"}
+              </Text>
+              {isActive && <View style={styles.activeUnderline} />}
+            </TouchableOpacity>
+          );
+        })}
       </View>
+
 
       {/* Search + Filter */}
       <View style={styles.searchContainer}>
@@ -76,6 +89,17 @@ export const BookingsScreen = () => {
           <Image source={require("../assets/Filter.png")} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
+
+      {/* Show Filters Applied if filter ≠ All */}
+      {selectedFilter !== "All" && (
+        <View style={styles.filtersAppliedRow}>
+          <Text style={styles.filtersAppliedText}>Filters applied</Text>
+          <TouchableOpacity onPress={() => setSelectedFilter("All")}>
+            <Text style={styles.clearFilterText}>Clear Filter</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
 
       {/* Bookings List */}
       <FlatList
@@ -142,9 +166,11 @@ const styles = StyleSheet.create({
   tabsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: Colors.cardBg,
+    backgroundColor: Colors.primary,
+  },
+  tabButton: {
+    alignItems: "center",
+    flex: 1,
   },
   tabText: {
     fontSize: 14,
@@ -155,11 +181,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Colors.textPrimary,
   },
+  activeUnderline: {
+    marginTop: 6,
+    height: 2,
+    width: "60%",
+    backgroundColor: Colors.textPrimary,
+    borderRadius: 2,
+  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 16,
     marginVertical: 12,
+    marginTop: 20
   },
   searchBox: {
     flex: 1,
@@ -196,6 +230,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 16,
+    marginTop: 20,
   },
   modal: {
     justifyContent: "flex-end",
@@ -252,4 +287,21 @@ const styles = StyleSheet.create({
   filterTagTextActive: {
     color: Colors.textPrimary,
   },
+  filtersAppliedRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  filtersAppliedText: {
+    fontSize: 14,
+    color: Colors.textTertiary,
+  },
+  clearFilterText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "green",
+  },
+
 });
